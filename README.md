@@ -12,10 +12,11 @@ This is a basic Flask-based web application that allows users to upload video fi
 
 Before running the application, make sure you have the following prerequisites installed:
 
+```bash
+    pip install flask ```
+
 - Python 3.x
 - Flask
-- Flask-SQLAlchemy
-- (Additional packages as needed, depending on your environment)
 
 ## Getting Started
 
