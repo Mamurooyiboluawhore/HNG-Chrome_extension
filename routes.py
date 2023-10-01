@@ -3,8 +3,11 @@ import os
 from werkzeug.utils import secure_filename
 from moviepy.editor import VideoFileClip
 import speech_recognition as sr
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 UPLOAD_FOLDER = 'uploads'  # Define the folder for storing uploaded videos
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
