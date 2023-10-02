@@ -58,4 +58,5 @@ Before running the application, make sure you have the following prerequisites i
 - Method: GET
 - Description: Lists the available video files in the system.
 - Response: JSON object containing a list of available video filenames.
-These APIs allow you to record videos, transcribe them, upload videos for transcription, retrieve transcriptions, and list available videos in the system. Make sure to follow the appropriate HTTP methods and request structures when using these endpoints.
+  
+#### These APIs allow you to record videos, transcribe them, upload videos for transcription, retrieve transcriptions, and list available videos in the system. Make sure to follow the appropriate HTTP methods and request structures when using these endpoints.
