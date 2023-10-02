@@ -103,7 +103,69 @@ def transcribe_video():
         transcribed_text = f"Could not request results from the speech recognition service; {e}"
     time.sleep(1)
 
-# Rest of your code remains unchanged...
+@app.route('/start-recording', methods=['POST'])
+def start_recording():
+    start_video_recording()
+    global transcription_thread
+    transcription_thread = threading.Thread(target=transcribe_video)
+    transcription_thread.start()
+    return 'Video recording started', 200
+
+@app.route('/stop-recording', methods=['POST'])
+def stop_recording():
+    stop_video_recording()
+    transcription_thread.join()  # Wait for transcription to finish
+    return 'Video recording stopped', 200
+
+@app.route('/upload', methods=['POST'])
+def upload_video():
+    try:
+        if 'video' not in request.files:
+            return "No file part", 400
+
+        video = request.files['video']
+
+        if video.filename == '':
+            return "No selected file", 400
+
+        if not allowed_file(video.filename):
+            return "Invalid file format. Supported formats: mp4, mpeg, quicktime", 400
+
+        filename = secure_filename(video.filename)
+        video_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        # Ensure that the "uploads" directory exists
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+
+        # Save the uploaded video
+        video.save(video_path)
+
+        # Transcribe the video to speech using the video path
+        transcribed_text = transcribe_video_to_speech(video_path)
+        # Split the video into chunks and send them to RabbitMQ
+        send_video_to_queue(video_path)
+
+        return transcribed_text, 200
+    except Exception as e:
+        # Log the error for debugging purposes
+        app.logger.error(f'Video upload failed: {str(e)}')
+        return "Internal Server Error", 500
+
+@app.route('/transcribe', methods=['GET'])
+def get_transcription():
+    global transcribed_text
+    return jsonify({'transcription': transcribed_text}), 200
+
+@app.route('/list-videos', methods=['GET'])
+def list_videos():
+    try:
+        video_files = os.listdir(app.config['UPLOAD_FOLDER'])
+        video_list = [filename for filename in video_files if allowed_file(filename)]
+        return jsonify({'videos': video_list}), 200
+    except Exception as e:
+        app.logger.error(f'Error listing videos: {str(e)}')
+        return 'Internal Server Error', 500
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
