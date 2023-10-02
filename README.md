@@ -12,8 +12,8 @@ This is a basic Flask-based web application that allows users to upload video fi
 
 Before running the application, make sure you have the following prerequisites installed:
 
-```bash
-    pip install flask ```
+
+    'pip install flask '
 
 - Python 3.x
 - Flask
@@ -24,15 +24,38 @@ Before running the application, make sure you have the following prerequisites i
 
    ```bash
    git clone https://github.com/Mamurooyiboluawhore/HNG-Chrome_extension```
-   ```run 
-   cd your-repo```
+   'cd your-repo`
 
    run the file 
-   ```bash
-    python app.py ```
 
-# Usage
-- Uploading Videos: Access the '/upload' route via a web browser or API to upload videos. Only allowed video formats will be accepted.
+    'python app.py '
 
-- Playing Videos: Access the '/video/<filename>' route to play an uploaded video by specifying its filename.
 
+#API Endpoints
+### Start Video Recording
+'URL: /start-recording'
+- Method: POST
+- Description: Starts video recording.
+- Response: Returns a message indicating that video recording has started.
+### Stop Video Recording
+- URL: /stop-recording
+- Method: POST
+- Description: Stops video recording and initiates the transcription process.
+- Response: Returns a message indicating that video recording has stopped.
+### Upload Recorded Video
+- URL: /upload
+- Method: POST
+- Description: Uploads a video file for transcription.
+- Request Body: Form data with the video file to be uploaded.
+- Response: Returns the transcribed text from the uploaded video.
+### Get Transcription
+- URL: /transcribe
+- Method: GET
+- Description: Retrieves the transcription of the last recorded video.
+- Response: JSON object containing the transcribed text.
+### List Available Videos
+- URL: /list-videos
+- Method: GET
+- Description: Lists the available video files in the system.
+- Response: JSON object containing a list of available video filenames.
+These APIs allow you to record videos, transcribe them, upload videos for transcription, retrieve transcriptions, and list available videos in the system. Make sure to follow the appropriate HTTP methods and request structures when using these endpoints.
